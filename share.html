@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Sharomin</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+     <link href='font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'/>
+     <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+     <script type="text/javascript" src="simpleUpload.js"></script>
+     <script type="text/javascript" src="scripts.js"></script>
+     
+     
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="bg-info" >
+
+
+
+
+      <nav class="navbar bg-primary navbar-static-top ">
+          <div class="container" >
+            
+              <div class="navbar-header">
+                <div class="col-lg-4">
+                  <p class="navbar-brand" >Sharomin</p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-lg-offset-4" >
+                <form class="navbar-form">
+                  <div class="form-group">
+                    <input id="openroomtext" type="text" class="form-control" placeholder="Andere Raum ID">
+                  </div>
+                  <button id="openroom" type="button" class="btn btn-success">Öffnen</button>
+                </form>
+              </div>
+              
+          </div>
+      </nav>
+
+    <div class="row">
+      <div class="container">
+
+
+
+      <div class="col-xs-12 col-md-9">
+        <div class="row">
+          <div id="progresscontainer" class="hidden">
+            <div class="progress">
+              <div id="progressbar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                0%
+              </div>
+            </div>
+          </div>
+          <div id="errormessagecontainer">
+ 
+          </div>
+        </div>
+        <div class="row">
+          <div class="panel panel-primary">
+
+              <div class="panel-heading row" style="margin:0px">
+                <div class="col-md-5">
+                  <ol id="treeorientation" class="breadcrumb">
+                    
+                  </ol>
+                </div>
+                <div class="btn-group col-md-5 col-md-offset-2" role="toolbar">
+                  <div class="hidden" id="fileUploadContainer">
+                    <form id="uploadform"  enctype="multipart/form-data">
+                      <input name="file" type="file" id="uploadinput"/>
+                    </form>
+                  </div>
+                  <button id="upload" type="button"  title="Hochladen" class="btn btn-warning"><span class="glyphicon glyphicon-open"></span></button>
+                  <button id="delete" type="button" title="Löschen" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span></button>
+                  <button id="folder" type="button" title="Neuer Ordner" class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span></button>
+                  <button id="move" type="button" title="Dateien Bewegen" class="btn btn-warning"><span class="glyphicon glyphicon-export"></span></button>
+                  <button id="rename" type="button" title="Umbenennen" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></button>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div id="roominexistant" class="hidden">
+                  <div class="col-md-6 col-md-offset-3"> 
+                    <p>Der von Ihnen angeforderte Raum existiert nicht mehr.</p>
+                  </div>
+                </div>
+                <div id="noroomleft" class="hidden">
+                  <div class="col-md-6 col-md-offset-3"> 
+                    <p>Es steht leider kein Raum mehr zur Verfügung.</p>
+                    <p>Dies liegt an der begrenzten Server-Kapazität.</p>
+                    <p>Wir freuen uns Sie später wieder sehen zu dürfen.</p>
+                  </div>
+                </div>
+                <div id="empty" class="hidden">
+                  <div  class="col-md-6 col-md-offset-3" >
+                    <p>Es ist leer hier. Laden Sie Dateien hoch <span class="glyphicon glyphicon-open"></span></p>
+                  </div>
+                </div>
+
+                
+                <div id="login" class="hidden" >
+
+                  <form>
+                    <div class="form-group col-md-4 col-md-offset-4" >
+                      <Label for="loginpassword" >Passwort eingeben</Label>
+                      <input type="password" class="form-control" id="loginpassword">
+                      <button id="loginbutton" type="button" class="form-control btn btn-default" >Login</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div id="datatree" class="hidden">
+
+                    
+                </div>
+                <div class="hidden" id="confirm" >
+                      <button type="button" onclick="cancelMove();" class="col-md-3 col-md-offset-2 btn btn-warning" id="cancelmovement" >Abbrechen</button>                      
+                      <button type="button" onclick="move();" class="col-md-3 col-md-offset-2 btn btn-success" id="confirmmovement" >Hierher Bewegen</button>
+                </div>
+
+            </div>
+
+          </div>
+        </div>
+          
+        </div>
+      
+
+
+
+      <div class="col-xs-12 col-md-3">
+        <div class="panel panel-primary"  >
+            <div class="panel-heading">
+              <h3 id="sidepaneltitle" class="panel-title">Raum ID Details</h3>
+            </div>
+            <div class="panel-body">
+              <p id="timeleft" ></p> 
+              <p id="spaceleft"></p>
+              <hr>
+              <div>
+                <label>Raum teilen <span class="label label-default">Click</span> <span class="label label-default">Ctrl+C</span></label>
+                <input id="sharelink" onClick="this.select();" value="https://kasimirtanner.ch/minute/share.html" class="form-control" a>
+               
+              </div>
+              <hr>
+                <div id="roomdetailsshow" class="show">
+                  <form>
+                    <div class="form-group">
+                      <input id="nameshow" type="text" class="form-control" id="name" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                      <textarea id="descshow" class="form-control" id="description" placeholder="Beschreibung" rows="2" style="resize:none" ></textarea>
+                    </div>
+                    <div class="form-goup">
+                      <button id="save" class="form-control btn btn-default" type="button">Speichern</button>
+                    </div>
+                  </form>
+                </div>
+                <div id="roomdetailshidden">
+                  <p id="name"></p>
+                  <p id="desc"></p>
+                </div>
+              <hr>
+              <label id="editclose" class="hidden" >Dieser Raum ist gesperrt. <span class="glyphicon glyphicon-lock" ></span></label>
+              <div id="editopen" class="show" >
+                <label><p>Jeder kann diesen Raum bearbeiten. <i class="fa fa-unlock"></i></p></label>
+                <button id="sperren" class="form-control btn btn-default" >Raum sperren</button>
+              </div>
+              <hr>
+              <label id="passwordset" class="hidden">Dieser Raum ist durch ein Passwort gesichert.</label>
+              <div id="passwordunset" class="show">
+                <form>
+                  <div class="form-group">
+                    <label for="password">Diesen Raum schützen</label>
+                    <input class="form-control" type="password" placeholder="Passwort" id="password">
+                  </div>
+                  <div class="form-group">
+                    <label for="password2">Passwort erneut eingeben</label>
+                    <input class="form-control" type="password" placeholder="Passwort" id="password2">
+                  </div>
+                  <div class="form-goup">
+                    <button id="setpassword" type="button" class="form-control btn btn-default">Passwort setzen</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+
+
+
+      </div>
+    </div>
+
+    <footer class="navbar-static-bottom" >
+      <div class="container">
+        <p>© Kasimir Tanner 2019</p>
+        <p>Es wird keine Verantwortung für Ihre Dateien übernommen. Nutzerdaten werden temporär zur Authentifizierung genutzt.</p>
+        <p>Muss ich hier hinschreiben, dass Cookies benutzt werden?</p>
+        <p>Ich sag das jetzt Mal so provisorisch.</p>
+        <p>Hiermit stimmen Sie der Nutzung von Cookies zu.</p>
+        <p>Die schmecken lecker, wie beim Bäcker.</p>
+      </div>
+    </footer>
+
+
+    
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- No jQuery javascript required, we have got our own copy of jquery on our server anyway-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
